@@ -1,5 +1,5 @@
-#include "surf.h"
-#include <stdio.h>
+#include "../../surf.h"
+
 
 void callback(SurfApp server, int port) {
     printf("Listening on port %d...\n", port);
