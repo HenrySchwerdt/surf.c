@@ -3,6 +3,5 @@ add_rules("mode.debug", "mode.release")
 
 target("hello_world")
     set_kind("binary")
-    add_headerfiles("*.h")
-    add_headerfiles("examples/**/*.h")
+    add_headerfiles("src/*.h")
     add_files("examples/hello_world/*.c")
