@@ -48,15 +48,11 @@ void add_route(SurfApp* app, const char* method, const char* path, RequestHandle
     app->num_routes++;
     app->routes = realloc(app->routes, app->num_routes * sizeof(SurfRoute));
 
-    // Allocate memory for the new strings and copy the content
     app->routes[app->num_routes-1].method = strdup(method);
     app->routes[app->num_routes-1].path = strdup(path);
 
-    // Check for allocation errors
     if (app->routes[app->num_routes-1].method == NULL || app->routes[app->num_routes-1].path == NULL) {
-        // Handle allocation error (e.g., by freeing allocated memory and returning)
         perror("Error allocating memory for method or path");
-        // Optionally, free allocated memory before returning
         return;
     }
 
