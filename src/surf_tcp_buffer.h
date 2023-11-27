@@ -57,8 +57,6 @@ static int check_for_nl(char *str, ssize_t length)
 
 static int check_for_end(char *str, ssize_t length)
 {
-    printf("Check for end\n");
-    printf("Value: %.*s", length, str);
     for (int i = 0; i < length - 3; i++)
     {
         if (str[i] == 10 && str[i + 1] == 13 && str[i + 2] == 10 && str[i + 3] == 13) {
@@ -77,7 +75,6 @@ int read_line(int client_socket, Buffer *buffer)
 {
     if (buffer->is_last && !buffer->overflow_length)
     {
-        printf("In return -1\n");
         return -1;
     }
     else if (buffer->is_last)
@@ -139,9 +136,7 @@ int read_line(int client_socket, Buffer *buffer)
             break;
         }
         iteration++;
-        printf("%.*s", bytes_received, window);
         buffer->is_last = check_for_end(window, bytes_received);
-        printf("Check for last: %d\n", buffer->is_last);
         int nl_index = check_for_nl(window, bytes_received);
         if (!nl_index && buffer->buffer_length + bytes_received < buffer->buffer_size)
         {

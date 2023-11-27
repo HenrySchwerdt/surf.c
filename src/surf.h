@@ -114,7 +114,7 @@ void send_resp(HttpResponse *resp)
 void *handle_client(void *arg)
 {
     ClientInfo *client_info = (ClientInfo *)arg;
-    // HttpRequest* request = parse_http_request(client_fd);
+    HttpRequest* request = parse_http_request(client_info->client_fd);
     HttpResponse* resp = (HttpResponse*) malloc(sizeof(HttpResponse));
     resp->client_fd = client_info->client_fd;
     if (!client_info->num_routes)
@@ -130,7 +130,26 @@ void *handle_client(void *arg)
                        "</body>\n"
                        "</html>"));
     } else {
-        client_info->routes[0].handler(NULL, resp);
+        SurfRoute* routeToProcess = NULL;
+        for (int i = 0; i < client_info->num_routes; i++) {
+            if (strcmp(client_info->routes[i].path, request->path) == 0) {
+                routeToProcess = &(client_info->routes[i]);
+            }
+        }
+        if (routeToProcess == NULL) {
+             send_resp(html(status(resp, 404),  "<!DOCTYPE html>\n"
+                       "<html>\n"
+                       "<head>\n"
+                       "    <title>404 Not Found</title>\n"
+                       "</head>\n"
+                       "<body>\n"
+                       "    <h1>404 Not Found</h1>\n"
+                       "    <p>The requested resource could not be found.</p>\n"
+                       "</body>\n"
+                       "</html>"));
+        } else {
+            routeToProcess->handler(request, resp);
+        }
     }
     
     free(client_info);
